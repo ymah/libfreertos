@@ -22,7 +22,7 @@ AOBJ=$(ASOURCES:.S=.o)
 
 # Lib directory and output file
 LIBDIR=lib
-LIB=$(LIBDIR)/libpip.a
+LIB=$(LIBDIR)/libfreertos.a
 
 
 # Add define for variant and architecture
