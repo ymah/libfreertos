@@ -21,7 +21,7 @@ uint32_t xProtectedQueueCreate( uint32_t uxQueueLength, uint32_t uxItemSize ){
   createArgs->lenght = uxQueueLength;
   createArgs->size_type = (uint32_t)uxItemSize;
   createArgs->returnCall = (uint32_t)0xDEADBEEF;
-  Pip_Notify(0,0x80,0x15,(uint32_t)createArgs);
+  Pip_Notify(0,0x80,queueCreate,(uint32_t)createArgs);
 
   /* FreeRTOS gave us in createArgs->returnCall the address of the queue */
   return createArgs->returnCall;
@@ -45,7 +45,7 @@ void xProtectedQueueSend(uint32_t xQueue,uint32_t pvItemToQueue,uint32_t xTicksT
   sendArgs->itemToQueue = (uint32_t*)pvItemToQueue;
   sendArgs->tickToWait = xTicksToWait;
 
-  Pip_Notify(0,0x80,0x16,(uint32_t)sendArgs);
+  Pip_Notify(0,0x80,queueSend,(uint32_t)sendArgs);
 
 
 
@@ -55,7 +55,7 @@ void xProtectedQueueSend(uint32_t xQueue,uint32_t pvItemToQueue,uint32_t xTicksT
  * [xProtectedQueueReceive receive something from a queue in the parent partition]
  * @param xQueue       The handle to the queue from which the item is to be received.
  * @param pvBuffer     Pointer to the buffer into which the received item will be copied.
- * @param xTicksToWait The maximum amount of time the task should block waiting for an item to receive should the queue be empty at the time of the call. Setting xTicksToWait to 0 will cause the function to return immediately if the queue is empty. The time is defined in tick periods so the constant portTICK_PERIOD_MS should be used to convert to real time if this is required. 
+ * @param xTicksToWait The maximum amount of time the task should block waiting for an item to receive should the queue be empty at the time of the call. Setting xTicksToWait to 0 will cause the function to return immediately if the queue is empty. The time is defined in tick periods so the constant portTICK_PERIOD_MS should be used to convert to real time if this is required.
  */
 void xProtectedQueueReceive(uint32_t xQueue,uint32_t pvBuffer,uint32_t xTicksToWait){
 
@@ -66,7 +66,7 @@ void xProtectedQueueReceive(uint32_t xQueue,uint32_t pvBuffer,uint32_t xTicksToW
   recArgs->bufferReceive = (uint32_t*)pvBuffer;
   recArgs->tickToWait = xTicksToWait;
 
-  Pip_Notify(0,0x80,0x16,(uint32_t)recArgs);
+  Pip_Notify(0,0x80,queueReceive,(uint32_t)recArgs);
 
 
 }
