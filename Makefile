@@ -6,7 +6,7 @@ AR=ar
 
 #Libpip dir
 
-LIBPIP=/home/mahckr/Documents/these/odsiDEMO/arch/libpip
+LIBPIP=../libpip
 # Directories
 
 
