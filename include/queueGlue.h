@@ -45,8 +45,8 @@ typedef struct xQueueReceiveParameters_s xQueueReceiveParameters;
 
 
 uint32_t xProtectedQueueCreate( uint32_t uxQueueLength, uint32_t uxItemSize );
-void xProtectedQueueSend(uint32_t xQueue,uint32_t pvItemToQueue,uint32_t xTicksToWait);
-void xProtectedQueueReceive(uint32_t xQueue,uint32_t pvBuffer,uint32_t xTicksToWait);
+uint32_t xProtectedQueueSend(uint32_t xQueue,uint32_t pvItemToQueue,uint32_t xTicksToWait);
+uint32_t xProtectedQueueReceive(uint32_t xQueue,uint32_t pvBuffer,uint32_t xTicksToWait);
 
 
 #endif

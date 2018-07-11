@@ -36,7 +36,7 @@ uint32_t xProtectedQueueCreate( uint32_t uxQueueLength, uint32_t uxItemSize ){
  * @param pvItemToQueue A pointer to the item that is to be placed on the queue. The size of the items the queue will hold was defined when the queue was created, so this many bytes will be copied from pvItemToQueue into the queue storage area.
  * @param xTicksToWait  The maximum amount of time the task should block waiting for space to become available on the queue, should it already be full. The call will return immediately if the queue is full and xTicksToWait is set to 0. The time is defined in tick periods so the constant portTICK_PERIOD_MS should be used to convert to real time if this is required.
  */
-void xProtectedQueueSend(uint32_t xQueue,uint32_t pvItemToQueue,uint32_t xTicksToWait){
+uint32_t xProtectedQueueSend(uint32_t xQueue,uint32_t pvItemToQueue,uint32_t xTicksToWait){
 
 
   xQueueSendParameters * sendArgs = (xQueueSendParameters*) allocPage(); // Queue send
@@ -47,7 +47,7 @@ void xProtectedQueueSend(uint32_t xQueue,uint32_t pvItemToQueue,uint32_t xTicksT
 
   Pip_Notify(0,0x80,queueSend,(uint32_t)sendArgs);
 
-
+  return (*(uint32_t*)(pvItemToQueue+0x1000-4));
 
 }
 
@@ -57,7 +57,7 @@ void xProtectedQueueSend(uint32_t xQueue,uint32_t pvItemToQueue,uint32_t xTicksT
  * @param pvBuffer     Pointer to the buffer into which the received item will be copied.
  * @param xTicksToWait The maximum amount of time the task should block waiting for an item to receive should the queue be empty at the time of the call. Setting xTicksToWait to 0 will cause the function to return immediately if the queue is empty. The time is defined in tick periods so the constant portTICK_PERIOD_MS should be used to convert to real time if this is required.
  */
-void xProtectedQueueReceive(uint32_t xQueue,uint32_t pvBuffer,uint32_t xTicksToWait){
+uint32_t xProtectedQueueReceive(uint32_t xQueue,uint32_t pvBuffer,uint32_t xTicksToWait){
 
 
   xQueueReceiveParameters * recArgs = (xQueueReceiveParameters*) allocPage(); // que receive
@@ -68,5 +68,6 @@ void xProtectedQueueReceive(uint32_t xQueue,uint32_t pvBuffer,uint32_t xTicksToW
 
   Pip_Notify(0,0x80,queueReceive,(uint32_t)recArgs);
 
+  return (*(uint32_t*)(pvBuffer+0x1000-4));
 
 }
