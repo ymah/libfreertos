@@ -5,8 +5,23 @@
 #include <pip/compat.h>
 #include "queueGlue.h"
 
+#define NULL ((void*)0)
+
+xQueueCreateParameters * createArgs = NULL;
+xQueueSendParameters * sendArgs = NULL;
+xQueueReceiveParameters * recArgs = NULL; // que receive
 
 
+void initQueueService(){
+  if(createArgs == NULL)
+    createArgs = allocPage();
+
+  if(sendArgs == NULL)
+    sendArgs = allocPage();
+
+  if(recArgs == NULL)
+      recArgs = allocPage();
+}
 /**
  * [xProtectedQueueCreate create a queue in the father]
  * @param  uxQueueLength The maximum number of items the queue can hold at any one time.
@@ -16,7 +31,6 @@
 uint32_t xProtectedQueueCreate( uint32_t uxQueueLength, uint32_t uxItemSize ){
 
 
-  xQueueCreateParameters * createArgs = (xQueueCreateParameters*) allocPage(); //Queue create
 
   createArgs->lenght = uxQueueLength;
   createArgs->size_type = (uint32_t)uxItemSize;
@@ -39,7 +53,7 @@ uint32_t xProtectedQueueCreate( uint32_t uxQueueLength, uint32_t uxItemSize ){
 uint32_t xProtectedQueueSend(uint32_t xQueue,uint32_t pvItemToQueue,uint32_t xTicksToWait){
 
 
-  xQueueSendParameters * sendArgs = (xQueueSendParameters*) allocPage(); // Queue send
+
 
   sendArgs->queue = xQueue;
   sendArgs->itemToQueue = (uint32_t*)pvItemToQueue;
@@ -60,7 +74,7 @@ uint32_t xProtectedQueueSend(uint32_t xQueue,uint32_t pvItemToQueue,uint32_t xTi
 uint32_t xProtectedQueueReceive(uint32_t xQueue,uint32_t pvBuffer,uint32_t xTicksToWait){
 
 
-  xQueueReceiveParameters * recArgs = (xQueueReceiveParameters*) allocPage(); // que receive
+
 
   recArgs->queue = xQueue;
   recArgs->bufferReceive = (uint32_t*)pvBuffer;
