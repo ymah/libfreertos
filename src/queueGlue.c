@@ -3,14 +3,27 @@
 #include <pip/paging.h>
 #include <pip/pipcall.h>
 #include <pip/compat.h>
+#include <pip/debug.h>
 #include "queueGlue.h"
 
 #define NULL ((void*)0)
+extern int printf(const char *c,...);
 
 xQueueCreateParameters * createArgs = NULL;
 xQueueSendParameters * sendArgs = NULL;
 xQueueReceiveParameters * recArgs = NULL; // que receive
 
+uint32_t * receiveBuffer;
+
+
+void * locmemcpy (void *dest, const void *src, uint32_t len)
+{
+  char *d = dest;
+  const char *s = src;
+  while (len--)
+    *d++ = *s++;
+  return dest;
+}
 
 void initQueueService(){
   if(createArgs == NULL)
@@ -61,7 +74,7 @@ uint32_t xProtectedQueueSend(uint32_t xQueue,uint32_t pvItemToQueue,uint32_t xTi
 
   Pip_Notify(0,0x80,queueSend,(uint32_t)sendArgs);
 
-  return (*(uint32_t*)(pvItemToQueue+0x1000-4));
+  return *(uint32_t*)0x600000;;
 
 }
 
@@ -75,13 +88,12 @@ uint32_t xProtectedQueueReceive(uint32_t xQueue,uint32_t pvBuffer,uint32_t xTick
 
 
 
-
   recArgs->queue = xQueue;
-  recArgs->bufferReceive = (uint32_t*)pvBuffer;
   recArgs->tickToWait = xTicksToWait;
-
   Pip_Notify(0,0x80,queueReceive,(uint32_t)recArgs);
+  locmemcpy((void*)pvBuffer,(uint32_t*)0x601000,0x1000);
 
-  return (*(uint32_t*)(pvBuffer+0x1000-4));
+
+  return *(uint32_t*)0x600000;
 
 }
