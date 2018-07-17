@@ -87,11 +87,11 @@ uint32_t xProtectedQueueSend(uint32_t xQueue,uint32_t pvItemToQueue,uint32_t xTi
 uint32_t xProtectedQueueReceive(uint32_t xQueue,uint32_t pvBuffer,uint32_t xTicksToWait){
 
 
-
   recArgs->queue = xQueue;
+  recArgs->bufferReceive = (uint32_t*) pvBuffer;
   recArgs->tickToWait = xTicksToWait;
+
   Pip_Notify(0,0x80,queueReceive,(uint32_t)recArgs);
-  locmemcpy((void*)pvBuffer,(uint32_t*)0x601000,0x1000);
 
 
   return *(uint32_t*)0x600000;
