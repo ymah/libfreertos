@@ -28,12 +28,13 @@ void * locmemcpy (void *dest, const void *src, uint32_t len)
 void initQueueService(){
   if(createArgs == NULL)
     createArgs = allocPage();
-
+  printf("Create page :%x\r\n",createArgs);
   if(sendArgs == NULL)
     sendArgs = allocPage();
-
+  printf("Send page :%x\r\n",sendArgs);
   if(recArgs == NULL)
       recArgs = allocPage();
+  printf("Receive page :%x\r\n",recArgs);
 }
 /**
  * [xProtectedQueueCreate create a queue in the father]
@@ -73,7 +74,7 @@ uint32_t xProtectedQueueSend(uint32_t xQueue,uint32_t pvItemToQueue,uint32_t xTi
   sendArgs->tickToWait = xTicksToWait;
 
   Pip_Notify(0,0x80,queueSend,(uint32_t)sendArgs);
-
+  printf("Come back from Send\r\n");
   return *(uint32_t*)0x600000;;
 
 }
@@ -93,7 +94,7 @@ uint32_t xProtectedQueueReceive(uint32_t xQueue,uint32_t pvBuffer,uint32_t xTick
 
   Pip_Notify(0,0x80,queueReceive,(uint32_t)recArgs);
 
-
+  printf("Come back from Receive\r\n");
   return *(uint32_t*)0x600000;
 
 }
